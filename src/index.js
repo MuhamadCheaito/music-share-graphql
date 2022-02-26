@@ -4,11 +4,15 @@ import App from './App'
 import {ThemeProvider} from '@mui/material/styles'
 import theme from './theme'
 import { CssBaseline } from '@mui/material'
+import client from './graphql/client'
+import { ApolloProvider } from '@apollo/client'
 
 ReactDOM.render(
+  <ApolloProvider client={client}>
   <ThemeProvider theme={theme}>
     <App />
     <CssBaseline />
-  </ThemeProvider>,
+  </ThemeProvider>
+  </ApolloProvider>,
   document.getElementById('root')
 );

@@ -38,7 +38,7 @@ const SongPlayer = () => {
     <>
       <Card variant='outlined' className={classes.container}>
         <div className={classes.details}>
-          <CardContent classes={classes.content}>
+          <CardContent className={classes.content}>
             <Typography variant="h5" component="h3">
               Title
             </Typography>
