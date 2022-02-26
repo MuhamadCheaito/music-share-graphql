@@ -64,7 +64,7 @@ const AddSong = () => {
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseDialog} color="secondary">Cancel</Button>
+          <Button onClick={handleCloseDialog} color="info">Cancel</Button>
           <Button variant="outlined" color="primary">Add Song</Button>
         </DialogActions>
       </Dialog>
