@@ -1,7 +1,9 @@
+import { useQuery } from '@apollo/client'
 import { PlayArrow, Save } from '@mui/icons-material'
 import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
+import { GET_SONGS } from '../graphql/queries'
 
 const useStyles = makeStyles(theme => ({
   container:{
@@ -25,12 +27,8 @@ const useStyles = makeStyles(theme => ({
 
 
 const SongList = () => {
-  let loading = false
-  const song = {
-    title: "Cartoon ON & ON",
-    artist:"NCS",
-    thumbnail:"https://i.ytimg.com/vi/K4DyBUG242c/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCVDGZSQEPvPuF1QyELmT2FV6vdaQ"
-  }
+  const {data, loading, error} = useQuery(GET_SONGS)
+
   if(loading){
     return (
       <div style={{
@@ -43,9 +41,10 @@ const SongList = () => {
       </div>
     )
   }
+  if(error) return <div>Error fetching songs</div>
   return (
-    <div>{Array.from({length: 10}, () => song).map((song, i) => (
-      <Song key={i} song={song}/> 
+    <div>{data.song.map((song, i) => (
+      <Song key={song.id} song={song}/> 
     ))}</div>
   )
 }
