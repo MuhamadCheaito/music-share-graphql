@@ -17,7 +17,10 @@ function App() {
           <SongList />
         </Grid>
         <Grid style={{
-          paddingTop: 100
+          position: 'fixed',
+          width: '100%',
+          right:0,
+          top:70
         }} item xs={12} md={5}>
           <SongPlayer />
         </Grid>
