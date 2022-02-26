@@ -5,6 +5,8 @@ import { makeStyles } from '@mui/styles'
 import SoundCloudPlayer from 'react-player/soundcloud'
 import YoutubePlayer from 'react-player/youtube'
 import ReactPlayer from 'react-player'
+import { useMutation } from '@apollo/client'
+import {ADD_SONG} from '../graphql/mutations'
 
 const useStyles = makeStyles(theme => ({
   contianer: {
@@ -24,18 +26,19 @@ const useStyles = makeStyles(theme => ({
     width: '90%'
   }
 }))
-
+const DEFAULT_SONG = {
+  duration: 0,
+  title: "",
+  artist: "",
+  thumbnail: ""
+};
 const AddSong = () => {
+  const classes = useStyles()
+  const [addSong, { error }] = useMutation(ADD_SONG)
   const [url, setUrl] = useState('')
   const [dialog, setDialog] = useState(false);
   const [playable, setPlayable] = useState(false);
-  const [song, setSong] = useState({
-    duration: 0,
-    title: "",
-    artist: "",
-    thumbnail: ""
-  })
-  const classes = useStyles()
+  const [song, setSong] = useState(DEFAULT_SONG)
 
   useEffect(() => {
     const isPlayable = SoundCloudPlayer.canPlay(url) || YoutubePlayer.canPlay(url)
@@ -52,6 +55,7 @@ const AddSong = () => {
   function handleCloseDialog() {
     setDialog(false);
   }
+
   async function handleEditSong({ player }) {
     const nestedPlayer = player.player.player
     let songData;
@@ -62,6 +66,27 @@ const AddSong = () => {
     }
     setSong({ ...songData, url })
   }
+
+  async function handleAddSong(){
+    try{
+    const {url, thumbnail,duration,title,artist} = song
+    await addSong({
+      variables: {
+        url: url.length > 0 ? url : null,
+        thumbnail: thumbnail.length > 0 ? thumbnail : null,
+        duration: duration > 0 ? duration : null,
+        title: title.length > 0 ? title : null,
+        artist: artist.length > 0 ? artist : null,
+      }
+    })
+    handleCloseDialog()
+    setSong(DEFAULT_SONG)
+    setUrl('')
+  } catch(error) {
+    console.error("Error adding song",error)
+  }
+  }
+
   function getYoutubeInfo(player) {
     const duration = player.getDuration()
     console.log(player);
@@ -89,6 +114,10 @@ const AddSong = () => {
     })
 
   }
+  function handleError(field) {
+    return error?.graphQLErrors[0].extensions.path.includes(field)
+  }
+
   const { thumbnail, title, artist } = song
   return (
     <div className={classes.contianer}>
@@ -111,6 +140,8 @@ const AddSong = () => {
             label="Title"
             variant='standard'
             fullWidth
+            error={handleError('title')}
+            helperText={handleError('title') && 'Fill out field'}
           />
           <TextField
             margin='dense'
@@ -120,6 +151,8 @@ const AddSong = () => {
             label="Artist"
             variant='standard'
             fullWidth
+            error={handleError('artist')}
+            helperText={handleError('artist') && 'Fill out field'}
           />
           <TextField
             margin='dense'
@@ -129,11 +162,13 @@ const AddSong = () => {
             label="Thumbnail"
             variant='standard'
             fullWidth
+            error={handleError('thumbnail')}
+            helperText={handleError('thumbnail') && 'Fill out field'}
           />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="info">Cancel</Button>
-          <Button variant="outlined" color="primary">Add Song</Button>
+          <Button onClick={handleAddSong} variant="outlined" color="primary">Add Song</Button>
         </DialogActions>
       </Dialog>
       <TextField

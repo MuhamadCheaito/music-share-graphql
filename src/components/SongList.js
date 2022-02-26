@@ -1,9 +1,9 @@
-import { useQuery } from '@apollo/client'
+import { useSubscription } from '@apollo/client'
 import { PlayArrow, Save } from '@mui/icons-material'
 import { Card, CardActions, CardContent, CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React from 'react'
-import { GET_SONGS } from '../graphql/queries'
+import { GET_SONGS } from '../graphql/subscriptions'
 
 const useStyles = makeStyles(theme => ({
   container:{
@@ -27,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 
 
 const SongList = () => {
-  const {data, loading, error} = useQuery(GET_SONGS)
+  const {data, loading, error} = useSubscription(GET_SONGS)
 
   if(loading){
     return (
