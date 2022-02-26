@@ -1,4 +1,4 @@
-import { Typography,Avatar,IconButton } from '@mui/material'
+import { Typography,Avatar,IconButton,useMediaQuery } from '@mui/material'
 import { Delete } from '@mui/icons-material';
 import {makeStyles} from '@mui/styles';
 import React from 'react'
@@ -26,12 +26,13 @@ const useStyles = makeStyles({
   }
 })
 const QueuedSongList = () => {
+  const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
   const song = {
     title: "Cartoon ON & ON",
     artist:"NCS",
     thumbnail:"https://i.ytimg.com/vi/K4DyBUG242c/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCVDGZSQEPvPuF1QyELmT2FV6vdaQ"
   }
-  return (
+  return greaterThanMd && (
     <div style={{margin: '10px 0'}}>
       <Typography color="textSecondary" variant="button">
         QUEUE (5)
