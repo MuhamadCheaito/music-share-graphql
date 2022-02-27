@@ -26,18 +26,15 @@ const useStyles = makeStyles({
   }
 })
 const QueuedSongList = ({ queue }) => {
+  console.log({queue})
   const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
-  const song = {
-    title: "Cartoon ON & ON",
-    artist:"NCS",
-    thumbnail:"https://i.ytimg.com/vi/K4DyBUG242c/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCVDGZSQEPvPuF1QyELmT2FV6vdaQ"
-  }
+
   return greaterThanMd && (
     <div style={{margin: '10px 0'}}>
       <Typography color="textSecondary" variant="button">
-        QUEUE (5)
+        QUEUE ({queue.length})
       </Typography>
-      {Array.from({length:5}, () => song).map((song,i) => (
+      {queue.map((song,i) => (
         <QueuedSong key={i} song={song}/>
       ))}
     </div>

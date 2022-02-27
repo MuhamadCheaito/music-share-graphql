@@ -1,10 +1,11 @@
-import { useSubscription } from '@apollo/react-hooks'
+import { useMutation, useSubscription } from '@apollo/react-hooks'
 import { Pause, PlayArrow, Save } from '@mui/icons-material'
 import { Card, CardActions, CardContent, 
         CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
 import React, { useContext, useEffect, useState } from 'react'
 import { SongContext } from '../App'
+import { ADD_OR_REMOVE_FROM_QUEUE } from '../graphql/mutations'
 import { GET_SONGS } from '../graphql/subscriptions'
 
 const useStyles = makeStyles(theme => ({
@@ -54,6 +55,7 @@ const SongList = () => {
 function Song({song}) {
   const {id,title,artist,thumbnail} = song
   const classes = useStyles()
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE)
   const [currentSongPlaying, setCurrentSongPlaying] = useState(false)
   const {state, dispatch} = useContext(SongContext)
   useEffect(() => {
@@ -65,7 +67,14 @@ function Song({song}) {
     dispatch({type: "SET_SONG", payload: {song}})
     dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type:"PLAY_SONG"})
   }
-  
+  function handleAddOrRemoveFromQueue(){
+    addOrRemoveFromQueue({
+      variables: {input:{
+        ...song,
+        __typename: 'Song'
+      }}
+    })
+  }
   return <Card className={classes.container}>
     <div className={classes.songInfoContainer}>
       <CardMedia image={thumbnail} className={classes.thumbnail}/>
@@ -82,7 +91,7 @@ function Song({song}) {
             <IconButton onClick={handleTogglePlay} size="small" color="primary">
               {currentSongPlaying ? <Pause /> : <PlayArrow/>}
             </IconButton>
-            <IconButton size="small">
+            <IconButton onClick={handleAddOrRemoveFromQueue} size="small">
               <Save color="info"/>
             </IconButton>
         </CardActions>
