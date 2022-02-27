@@ -1,6 +1,6 @@
 import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material'
 import { Card, CardContent, CardMedia, IconButton, Slider, Typography } from '@mui/material'
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import QueuedSongList from './QueuedSongList'
 import { makeStyles } from '@mui/styles'
 import { SongContext } from '../App'
@@ -43,8 +43,23 @@ const SongPlayer = () => {
   const [played,setPlayed] = useState(0)
   const [seeking,setSeeking] = useState(false)
   const [playedSeconds,setPlayedSeconds] = useState(0)
+  const [positionInQueue,setPositionInQueue] = useState(0)
   const reactPlayerRef = useRef()
   const classes = useStyles()
+
+  useEffect(() => {
+    const songIndex = data.queue.findIndex(song => song.id === state.song.id)
+    setPositionInQueue(songIndex)
+  },[data.queue,state.song.id])
+
+  useEffect(() => {
+    const nextSong = data.queue[positionInQueue + 1]
+    if(played >= .99 && nextSong){
+      setPlayed(0)
+      dispatch({type: "SET_SONG",payload: {song:nextSong}})
+    }
+  },[data.queue, played, dispatch, positionInQueue])
+
   function handleTogglePlay(){
     dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type: "PLAY_SONG"})
   }
@@ -61,6 +76,18 @@ const SongPlayer = () => {
   function formatDuration(seconds){
     return new Date(seconds * 1000).toISOString().substring(11,19)
   }
+  function handlePlayNextSong(){
+    const nextSong = data.queue[positionInQueue + 1]
+    if(nextSong){
+      dispatch({type: "SET_SONG",payload: {song:nextSong}})
+    }
+  }
+  function handlePlayPreviousSong(){
+    const prevSong = data.queue[positionInQueue - 1]
+    if(prevSong){
+      dispatch({type: "SET_SONG",payload: {song:prevSong}})
+    }
+  }
   return (
     <>
       <Card variant='outlined' className={classes.container}>
@@ -74,13 +101,13 @@ const SongPlayer = () => {
             </Typography>
           </CardContent>
         <div className={classes.controls}>
-          <IconButton>
+          <IconButton onClick={handlePlayPreviousSong}>
             <SkipPrevious/>
           </IconButton>
           <IconButton onClick={handleTogglePlay}>
            { state.isPlaying ? <Pause className={classes.playIcon}/> : <PlayArrow className={classes.playIcon}/>}
           </IconButton>
-          <IconButton>
+          <IconButton onClick={handlePlayNextSong}>
             <SkipNext/>
           </IconButton>
           <Typography variant="subtitle1" component="p" color="textSecondary">
