@@ -2,6 +2,8 @@ import { Typography,Avatar,IconButton,useMediaQuery } from '@mui/material'
 import { Delete } from '@mui/icons-material';
 import {makeStyles} from '@mui/styles';
 import React from 'react'
+import { useMutation } from '@apollo/react-hooks';
+import { ADD_OR_REMOVE_FROM_QUEUE } from '../graphql/mutations';
 
 const useStyles = makeStyles({
   avatar:{
@@ -26,15 +28,16 @@ const useStyles = makeStyles({
   }
 })
 const QueuedSongList = ({ queue }) => {
-  console.log({queue})
   const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
-
   return greaterThanMd && (
     <div style={{margin: '10px 0'}}>
       <Typography color="textSecondary" variant="button">
         QUEUE ({queue.length})
       </Typography>
-      {queue.map((song,i) => (
+      { !queue.length ? <Typography fontFamily="Courier" color="textSecondary" variant="h5" align="center">
+        There's No Queues Available
+        </Typography> 
+        : queue.map((song,i) => (
         <QueuedSong key={i} song={song}/>
       ))}
     </div>
@@ -42,6 +45,19 @@ const QueuedSongList = ({ queue }) => {
 }
 function QueuedSong({ song }){
   const {thumbnail, artist, title} = song
+  const [addOrRemoveFromQueue] = useMutation(ADD_OR_REMOVE_FROM_QUEUE,{
+    onCompleted: data => {
+      localStorage.setItem('queue',JSON.stringify(data.addOrRemoveFromQueue))
+    }
+  })
+  function handleAddOrRemoveFromQueue(){
+    addOrRemoveFromQueue({
+      variables: {input:{
+        ...song,
+        __typename: 'Song'
+      }}
+    })
+  }
   const classes = useStyles();
   return <div className={classes.container}>
     <Avatar src={thumbnail} alt="Song thumbnail" className={classes.avatar} />
@@ -53,9 +69,10 @@ function QueuedSong({ song }){
           {artist}
         </Typography>
     </div>
-    <IconButton>
+    <IconButton onClick={handleAddOrRemoveFromQueue}>
       <Delete color="error"/>
     </IconButton>
   </div>
 }
+
 export default QueuedSongList
