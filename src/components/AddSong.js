@@ -5,8 +5,8 @@ import { makeStyles } from '@mui/styles'
 import SoundCloudPlayer from 'react-player/soundcloud'
 import YoutubePlayer from 'react-player/youtube'
 import ReactPlayer from 'react-player'
-import { useMutation } from '@apollo/client'
 import {ADD_SONG} from '../graphql/mutations'
+import { useMutation } from '@apollo/react-hooks'
 
 const useStyles = makeStyles(theme => ({
   contianer: {

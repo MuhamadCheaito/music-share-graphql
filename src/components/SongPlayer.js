@@ -4,6 +4,8 @@ import React, { useContext } from 'react'
 import QueuedSongList from './QueuedSongList'
 import { makeStyles } from '@mui/styles'
 import { SongContext } from '../App'
+import { GET_QUEUED_SONGS } from '../graphql/queries'
+import { useQuery } from '@apollo/react-hooks'
 
 const useStyles = makeStyles(theme => ({
   container:{
@@ -34,6 +36,7 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SongPlayer = () => {
+  const { data } = useQuery(GET_QUEUED_SONGS)
   const { state, dispatch } = useContext(SongContext)
   const classes = useStyles()
   function handleTogglePlay(){
@@ -77,7 +80,7 @@ const SongPlayer = () => {
         image={state.song.thumbnail}
         />
       </Card>
-      <QueuedSongList />
+      <QueuedSongList queue={data.queue}/>
     </>
   )
 }

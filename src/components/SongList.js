@@ -1,4 +1,4 @@
-import { useSubscription } from '@apollo/client'
+import { useSubscription } from '@apollo/react-hooks'
 import { Pause, PlayArrow, Save } from '@mui/icons-material'
 import { Card, CardActions, CardContent, 
         CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'

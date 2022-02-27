@@ -5,7 +5,7 @@ import {ThemeProvider} from '@mui/material/styles'
 import theme from './theme'
 import { CssBaseline } from '@mui/material'
 import client from './graphql/client'
-import { ApolloProvider } from '@apollo/client'
+import { ApolloProvider } from '@apollo/react-hooks'
 
 ReactDOM.render(
   <ApolloProvider client={client}>

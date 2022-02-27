@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     whiteSpace: 'nowrap'
   }
 })
-const QueuedSongList = () => {
+const QueuedSongList = ({ queue }) => {
   const greaterThanMd = useMediaQuery(theme => theme.breakpoints.up('md'))
   const song = {
     title: "Cartoon ON & ON",
