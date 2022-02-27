@@ -1,5 +1,6 @@
 import {
   ApolloClient,
+  gql,
   InMemoryCache,
 } from '@apollo/client'
 import { WebSocketLink } from "@apollo/client/link/ws";
@@ -17,6 +18,9 @@ const client = new ApolloClient({
       }
     },
   }),
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
+  typeDefs: gql`
+  
+  `
 });
 export default client

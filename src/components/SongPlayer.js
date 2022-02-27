@@ -1,8 +1,9 @@
-import { PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material'
+import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@mui/icons-material'
 import { Card, CardContent, CardMedia, IconButton, Slider, Typography } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import QueuedSongList from './QueuedSongList'
 import { makeStyles } from '@mui/styles'
+import { SongContext } from '../App'
 
 const useStyles = makeStyles(theme => ({
   container:{
@@ -33,25 +34,29 @@ const useStyles = makeStyles(theme => ({
 }))
 
 const SongPlayer = () => {
+  const { state, dispatch } = useContext(SongContext)
   const classes = useStyles()
+  function handleTogglePlay(){
+    dispatch(state.isPlaying ? {type: "PAUSE_SONG"} : {type: "PLAY_SONG"})
+  }
   return (
     <>
       <Card variant='outlined' className={classes.container}>
         <div className={classes.details}>
           <CardContent className={classes.content}>
             <Typography variant="h5" component="h3">
-              Title
+              {state.song.title}
             </Typography>
             <Typography variant="subtitle1" component="p" color="textSecondary">
-              Artist
+              {state.song.artist}
             </Typography>
           </CardContent>
         <div className={classes.controls}>
           <IconButton>
             <SkipPrevious/>
           </IconButton>
-          <IconButton>
-            <PlayArrow className={classes.playIcon}/>
+          <IconButton onClick={handleTogglePlay}>
+           { state.isPlaying ? <Pause className={classes.playIcon}/> : <PlayArrow className={classes.playIcon}/>}
           </IconButton>
           <IconButton>
             <SkipNext/>
@@ -69,7 +74,7 @@ const SongPlayer = () => {
         </div>
         <CardMedia 
         className={classes.thumbnail}
-        image="https://i.ytimg.com/vi/K4DyBUG242c/hqdefault.jpg?sqp=-oaymwEcCOADEI4CSFXyq4qpAw4IARUAAIhCGAFwAcABBg==&rs=AOn4CLCVDGZSQEPvPuF1QyELmT2FV6vdaQ"
+        image={state.song.thumbnail}
         />
       </Card>
       <QueuedSongList />
