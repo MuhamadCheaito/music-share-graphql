@@ -1,5 +1,5 @@
 import { useMutation, useSubscription } from '@apollo/react-hooks'
-import { Pause, PlayArrow, Save } from '@mui/icons-material'
+import { Favorite, FavoriteBorder, FavoriteOutlined, Pause, PlayArrow, Save } from '@mui/icons-material'
 import { Card, CardActions, CardContent, 
         CardMedia, CircularProgress, IconButton, Typography } from '@mui/material'
 import { makeStyles } from '@mui/styles'
@@ -96,7 +96,7 @@ function Song({song}) {
               {currentSongPlaying ? <Pause /> : <PlayArrow/>}
             </IconButton>
             <IconButton onClick={handleAddOrRemoveFromQueue} size="small">
-              <Save color="info"/>
+              <Favorite color="error"/> 
             </IconButton>
         </CardActions>
       </div>

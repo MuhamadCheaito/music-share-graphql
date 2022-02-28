@@ -4,7 +4,6 @@ import { makeStyles } from '@mui/styles'
 import { HeadsetTwoTone } from '@mui/icons-material'
 
 const useStyles = makeStyles((theme) => ({
-  
   title: {
     marginLeft: theme.spacing(2)
   },

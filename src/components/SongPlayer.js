@@ -58,6 +58,7 @@ const SongPlayer = () => {
       setPlayed(0)
       dispatch({type: "SET_SONG",payload: {song:nextSong}})
     }
+    document.title = `Song: ${state.song.title} - ${state.song.artist}`;
   },[data.queue, played, dispatch, positionInQueue])
 
   function handleTogglePlay(){
@@ -81,11 +82,17 @@ const SongPlayer = () => {
     if(nextSong){
       dispatch({type: "SET_SONG",payload: {song:nextSong}})
     }
+    else{
+      dispatch({type: "SET_SONG",payload: {song:data.queue[0]}})
+    }
   }
   function handlePlayPreviousSong(){
     const prevSong = data.queue[positionInQueue - 1]
     if(prevSong){
       dispatch({type: "SET_SONG",payload: {song:prevSong}})
+    }
+    else{
+        dispatch({type: "SET_SONG",payload: {song:data.queue[data.queue.length - 1]}})
     }
   }
   return (

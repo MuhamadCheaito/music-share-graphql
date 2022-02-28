@@ -8,12 +8,12 @@ import songReducer from './reducer'
 
 export const SongContext = createContext({
     song: {
-      id:"9e06f755-d8ad-4b0a-bc0a-93b6e8cefb96",
-      title:"Cartoon - On & On (feat. Daniel Levi)",
-      artist:"NCS Release",
-      thumbnail:"http://img.youtube.com/vi/K4DyBUG242c/0.jpg",
-      url:"https://www.youtube.com/watch?v=K4DyBUG242c",
-      duration:208
+      id:"",
+      title:"",
+      artist:"",
+      thumbnail:"",
+      url:"",
+      duration:0
     },
     isPlaying: false
 })

@@ -10,6 +10,4 @@ subscription getSongs {
       title
       url
     }
-  }
-  
-`
+  }`

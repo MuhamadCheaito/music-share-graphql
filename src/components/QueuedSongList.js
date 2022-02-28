@@ -32,7 +32,7 @@ const QueuedSongList = ({ queue }) => {
   return greaterThanMd && (
     <div style={{margin: '10px 0'}}>
       <Typography color="textSecondary" variant="button">
-        QUEUE ({queue.length})
+        Playlist ({queue.length})
       </Typography>
       { !queue.length ? <Typography fontFamily="Courier" color="textSecondary" variant="h5" align="center">
         There's No Queues Available
